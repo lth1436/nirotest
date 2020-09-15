@@ -89,6 +89,9 @@ class AsyncTask:
 
 
 
-if __name__ == "__main__":
-  app = AsyncTask()
+app = AsyncTask()
+def main( gctx=None ):
   app.Task()
+
+if __name__ == "__main__":
+  main()
