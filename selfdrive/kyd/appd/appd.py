@@ -29,7 +29,7 @@ def all_kill( enable = 0 ):
 def main(gctx=None):
   softkey_is_running = False
   opkr_enable_softkey = False
-  navigation_is_running = True if params.get("OpkrBootNavigation", encoding='utf8') == "1" else False
+  navigation_is_running = int( params.get("OpkrBootNavigation", encoding='utf8') )
 
   while True:
     opkr_enable_softkey = int(params.get('OpkrRunSoftkey', encoding='utf8'))
@@ -41,15 +41,15 @@ def main(gctx=None):
           opkr_enable = True
 
       if opkr_enable:
-        print( '1:{} 2:{}'.format( x[1], x[2], program_runing[nPos] ) )        
-        put_nonblocking( x[1], '0')
+        print( '1:{} 2:{}'.format( x[1], x[2], program_runing[nPos] ) )
         all_kill()
         program_runing[nPos] = exec_app( opkr_enable, x[2], x[3])
         time.sleep(1)
+        put_nonblocking( x[1], '0')
         if nPos == 2:
           opkr_enable_softkey = True
 
-    navigation_is_running = False
+    navigation_is_running = 0
     # allow user to manually start/stop app
     if opkr_enable_softkey:
       put_nonblocking('OpkrRunSoftkey', '0')
