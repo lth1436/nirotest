@@ -48,6 +48,9 @@ def main(gctx=None):
         put_nonblocking( x[1], '0')
         if nPos == 2:
           opkr_enable_softkey = True
+      else:
+        time.sleep(0.1)
+
 
     navigation_is_running = 0
     # allow user to manually start/stop app
@@ -57,8 +60,7 @@ def main(gctx=None):
         softkey_is_running = exec_app(opkr_enable_softkey, "com.gmd.hidesoftkeys", "com.gmd.hidesoftkeys.MainActivity")
        
 
-    # every 3 seconds, we re-check status
-    time.sleep(0.2)
+    time.sleep(0.3)
 
 
 def exec_app(status, app, app_main):
