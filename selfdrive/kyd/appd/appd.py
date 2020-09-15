@@ -83,14 +83,14 @@ class AsyncTask:
       if not self.softkey_is_running:
         self.softkey_is_running = self.exec_app(self.opkr_enable_softkey, "com.gmd.hidesoftkeys", "com.gmd.hidesoftkeys.MainActivity")
       
-    threading.Time( 0.1, self.Task ).start()
+    threading.Timer( 0.1, self.Task ).start()
     #time.sleep(0.3)
 
 
 
 
 app = AsyncTask()
-def main( gctx=None ):
+def main(gctx=None):
   app.Task()
 
 if __name__ == "__main__":
