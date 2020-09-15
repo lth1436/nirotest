@@ -66,7 +66,7 @@ class AsyncTask:
 
       if opkr_enable:
         print( '1:{} 2:{}'.format( x[1], x[2], program_runing[nPos] ) )
-        all_kill()
+        self.all_kill()
         program_runing[nPos] = self.exec_app( opkr_enable, x[2], x[3])
         time.sleep(1)
         put_nonblocking( x[1], '0')
@@ -83,7 +83,7 @@ class AsyncTask:
       if not self.softkey_is_running:
         self.softkey_is_running = self.exec_app(self.opkr_enable_softkey, "com.gmd.hidesoftkeys", "com.gmd.hidesoftkeys.MainActivity")
       
-    threading.Timer( 0.1, self.Task ).start()
+    threading.Timer( 0.3, self.Task ).start()
     #time.sleep(0.3)
 
 
