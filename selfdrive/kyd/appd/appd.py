@@ -27,6 +27,7 @@ class AsyncTask:
     self.navigation_is_running = int( params.get("OpkrBootNavigation", encoding='utf8') )
 
   def all_kill(self, enable = 0 ):
+    put_nonblocking('OpkrRunSoftkey', '0')
     for x in program:
       nPos = x[0]
       put_nonblocking( x[1], '0')
