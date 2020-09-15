@@ -733,7 +733,7 @@ static void ui_draw_debug(UIState *s)
     default :  sprintf( str_msg, "%d", scene.params.nOpkrAccelProfile ); nColor = COLOR_WHITE;  break;
   }
   nvgFillColor(s->vg, nColor);
-  ui_print( s, x_pos+50, y_pos+0, "%s", str_msg );
+  ui_print( s, x_pos, y_pos+0, "%s", str_msg );
 
   nvgFontSize(s->vg, 80);
   switch( scene.cruiseState.modeSel  )
