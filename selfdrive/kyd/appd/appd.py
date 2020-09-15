@@ -29,6 +29,7 @@ class AsyncTask:
   def all_kill(self, enable = 0 ):
     for x in program:
       nPos = x[0]
+      put_nonblocking( x[1], '0')
       if program_runing[nPos]:
         program_runing[nPos] = 0
         self.exec_app( enable, x[2], x[3])
@@ -83,15 +84,18 @@ class AsyncTask:
       if not self.softkey_is_running:
         self.softkey_is_running = self.exec_app(self.opkr_enable_softkey, "com.gmd.hidesoftkeys", "com.gmd.hidesoftkeys.MainActivity")
       
-    threading.Timer( 0.3, self.Task ).start()
-    #time.sleep(0.3)
+    #threading.Timer( 0.3, self.Task ).start()
+    time.sleep(0.3)
 
 
 
 
 app = AsyncTask()
 def main(gctx=None):
-  app.Task()
+  app.all_kill()
+
+  while True:
+    app.Task()
 
 if __name__ == "__main__":
   main()
