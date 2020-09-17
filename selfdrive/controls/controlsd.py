@@ -455,7 +455,7 @@ class Controls:
     log_alertTextMsg2 = trace1.global_alertTextMsg2
 
     log_alertTextMsg1 += ' ctrl={}'.format( self.sm['health'].controlsAllowed )
-    # trace1.printf( '' )
+
     
 
     CC = car.CarControl.new_message()
@@ -561,6 +561,7 @@ class Controls:
     controlsState.output = float(lac_log.output)
     controlsState.alertTextMsg1 = str(log_alertTextMsg1)
     controlsState.alertTextMsg2 = str(log_alertTextMsg2)
+    controlsState.model_speed = self.CI.CC.model_speed   #, self.model_sum    
 
     if self.CP.lateralTuning.which() == 'pid':
       controlsState.lateralControlState.pidState = lac_log

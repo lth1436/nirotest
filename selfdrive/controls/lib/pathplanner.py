@@ -208,6 +208,8 @@ class PathPlanner():
     steeringPressed  = sm['carState'].steeringPressed
     steeringTorque = sm['carState'].steeringTorque
     active = sm['controlsState'].active
+    model_speed = sm['controlsState'].model_speed
+
     v_ego_kph = v_ego * CV.MS_TO_KPH
 
     self.steerRatio = sm['liveParameters'].steerRatio
@@ -359,18 +361,28 @@ class PathPlanner():
           self.angle_steers_des_mpc = self.limit_ctrl( org_angle_steers_des, limit_steers, angle_steers )
 
     elif v_ego_kph < 10:  # 30
-        xp = [5,10]
-        fp2 = [1,5]
-        limit_steers = interp( v_ego_kph, xp, fp2 )
-        self.angle_steers_des_mpc = self.limit_ctrl( org_angle_steers_des, limit_steers, angle_steers )
+      xp = [5,10]
+      fp2 = [1,5]
+      limit_steers = interp( v_ego_kph, xp, fp2 )
+      self.angle_steers_des_mpc = self.limit_ctrl( org_angle_steers_des, limit_steers, angle_steers )
 
-    elif angle_steers > 10: # angle steer > 10 
-        limit_steers = 5
-        self.angle_steers_des_mpc = self.limit_ctrl1( org_angle_steers_des, limit_steers, 2, angle_steers )
+    #elif v_ego_kph > 60: 
+    #  pass
+    elif angle_steers > 10: # angle steer > 10
+        xp = [30,200]
+        fp1 = [20,10]  # +
+        fp2 = [0,10]   # -
+        limit_steers1 = interp( model_speed, xp, fp1 )  # +
+        limit_steers2 = interp( model_speed, xp, fp2 )  # -
+        self.angle_steers_des_mpc = self.limit_ctrl1( org_angle_steers_des, limit_steers1, limit_steers2, angle_steers )
 
     elif angle_steers < -10: # angle steer < -10 
-        limit_steers = 5
-        self.angle_steers_des_mpc = self.limit_ctrl1( org_angle_steers_des, 2, limit_steers, angle_steers )
+        xp = [30,200]
+        fp1 = [0,10]  # +
+        fp2 = [20,10] # -
+        limit_steers1 = interp( model_speed, xp, fp1 )  # +
+        limit_steers2 = interp( model_speed, xp, fp2 )  # -
+        self.angle_steers_des_mpc = self.limit_ctrl1( org_angle_steers_des, limit_steers1, limit_steers2, angle_steers )
   
     #  Check for infeasable MPC solution
     mpc_nans = any(math.isnan(x) for x in self.mpc_solution[0].delta)
