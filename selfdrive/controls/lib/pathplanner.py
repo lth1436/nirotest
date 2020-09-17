@@ -369,9 +369,9 @@ class PathPlanner():
     #elif v_ego_kph > 60: 
     #  pass
     elif abs(angle_steers) > 10: # angle steer > 10
-        xp = [-10,0,10]
-        fp1 = [2,2,100]  # +
-        fp2 = [100,2,2]   # -
+        xp = [-5,0,5]
+        fp1 = [5,5,100]  # +
+        fp2 = [100,5,5]   # -
         limit_steers1 = interp( model_sum, xp, fp1 )  # +
         limit_steers2 = interp( model_sum, xp, fp2 )  # -
         self.angle_steers_des_mpc = self.limit_ctrl1( org_angle_steers_des, limit_steers1, limit_steers2, angle_steers )
