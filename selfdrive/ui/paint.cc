@@ -712,7 +712,7 @@ static void ui_draw_debug(UIState *s)
   ui_print( s, x_pos, y_pos+250, "lW:%.2f", scene.pathPlan.laneWidth );
   ui_print( s, x_pos, y_pos+300, "prob:%.2f, %.2f", scene.pathPlan.lProb, scene.pathPlan.rProb );
   ui_print( s, x_pos, y_pos+350, "Poly:%.2f, %.2f", scene.pathPlan.lPoly, scene.pathPlan.rPoly );
-  ui_print( s, x_pos, y_pos+400, "model_speed:%.1f" , scene.model_speed);
+  ui_print( s, x_pos, y_pos+400, "model_sum:%.1f" , scene.model_sum);
   ui_print( s, x_pos, y_pos+450, "awareness:%.2f" , scene.awareness_status);
 
 
