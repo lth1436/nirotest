@@ -366,11 +366,11 @@ class PathPlanner():
 
     elif angle_steers > 10: # angle steer > 10 
         limit_steers = 5
-        self.angle_steers_des_mpc = self.limit_ctrl1( org_angle_steers_des, limit_steers, 1, angle_steers )
+        self.angle_steers_des_mpc = self.limit_ctrl1( org_angle_steers_des, limit_steers, 2, angle_steers )
 
     elif angle_steers < -10: # angle steer < -10 
         limit_steers = 5
-        self.angle_steers_des_mpc = self.limit_ctrl1( org_angle_steers_des, 1, limit_steers, angle_steers )
+        self.angle_steers_des_mpc = self.limit_ctrl1( org_angle_steers_des, 2, limit_steers, angle_steers )
   
     #  Check for infeasable MPC solution
     mpc_nans = any(math.isnan(x) for x in self.mpc_solution[0].delta)
