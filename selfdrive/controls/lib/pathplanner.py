@@ -369,7 +369,7 @@ class PathPlanner():
     elif v_ego_kph > 40: 
       pass
     elif abs(angle_steers) > 10: # angle steer > 10
-        xp = [-10,-5,0,5,10]    # 5 조향각 약 10도
+        xp = [-10,-5,0,5,10]    # 5 조향각 약 12도, 10=>28 15=>35, 30=>52
         fp1 = [1,3,10,20,10]  # +
         fp2 = [10,20,10,3,1]   # -
         limit_steers1 = interp( model_sum, xp, fp1 )  # +
