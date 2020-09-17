@@ -208,7 +208,7 @@ class PathPlanner():
     steeringPressed  = sm['carState'].steeringPressed
     steeringTorque = sm['carState'].steeringTorque
     active = sm['controlsState'].active
-    model_speed = sm['controlsState'].model_speed
+    model_speed = sm['controlsState'].modelSpeed
 
     v_ego_kph = v_ego * CV.MS_TO_KPH
 

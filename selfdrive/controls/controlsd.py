@@ -561,7 +561,7 @@ class Controls:
     controlsState.output = float(lac_log.output)
     controlsState.alertTextMsg1 = str(log_alertTextMsg1)
     controlsState.alertTextMsg2 = str(log_alertTextMsg2)
-    controlsState.model_speed = self.CI.CC.model_speed   #, self.model_sum    
+    controlsState.modelSpeed = self.CI.CC.model_speed   #, self.model_sum    
 
     if self.CP.lateralTuning.which() == 'pid':
       controlsState.lateralControlState.pidState = lac_log
