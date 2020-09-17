@@ -102,7 +102,16 @@ class PathPlanner():
           value = p_limit
       elif  value < m_limit:
           value = m_limit
-      return value    
+      return value
+
+  def limit_ctrl1(self, value, limit1, limit2, offset ):
+      p_limit = offset + limit1
+      m_limit = offset - limit2
+      if value > p_limit:
+          value = p_limit
+      elif  value < m_limit:
+          value = m_limit
+      return value     
 
   def setup_mpc(self):
     self.libmpc = libmpc_py.libmpc
@@ -349,12 +358,18 @@ class PathPlanner():
         if delta_steer < 0:
           self.angle_steers_des_mpc = self.limit_ctrl( org_angle_steers_des, limit_steers, angle_steers )
 
-    elif v_ego_kph < 20:  # 30
-        xp = [5,10,20]
-        fp2 = [1,3,5]
+    elif v_ego_kph < 10:  # 30
+        xp = [5,10]
+        fp2 = [1,5]
         limit_steers = interp( v_ego_kph, xp, fp2 )
         self.angle_steers_des_mpc = self.limit_ctrl( org_angle_steers_des, limit_steers, angle_steers )
-
+    elif angle_steers > 10: # angle steer > 10 
+        limit_steers = 5
+        self.angle_steers_des_mpc = self.limit_ctrl1( org_angle_steers_des, limit_steers, 0, angle_steers )
+    elif angle_steers < -10: # angle steer < -10 
+        limit_steers = 5
+        self.angle_steers_des_mpc = self.limit_ctrl1( org_angle_steers_des, 0, limit_steers, angle_steers )
+  
     #  Check for infeasable MPC solution
     mpc_nans = any(math.isnan(x) for x in self.mpc_solution[0].delta)
     t = sec_since_boot()
