@@ -254,8 +254,8 @@ class PathPlanner():
                         ((steeringTorque > 0 and self.lane_change_direction == LaneChangeDirection.left) or \
                           (steeringTorque < 0 and self.lane_change_direction == LaneChangeDirection.right))
 
-      blindspot_detected = ((sm['carState'].leftBlindspot and self.lane_change_direction == LaneChangeDirection.left) or
-                            (sm['carState'].rightBlindspot and self.lane_change_direction == LaneChangeDirection.right))                          
+      blindspot_detected = ((leftBlindspot and self.lane_change_direction == LaneChangeDirection.left) or
+                            (rightBlindspot and self.lane_change_direction == LaneChangeDirection.right))                          
 
       lane_change_prob = self.LP.l_lane_change_prob + self.LP.r_lane_change_prob
 
@@ -349,8 +349,8 @@ class PathPlanner():
         if delta_steer < 0:
           self.angle_steers_des_mpc = self.limit_ctrl( org_angle_steers_des, limit_steers, angle_steers )
 
-    elif v_ego_kph < 30:  # 30
-        xp = [5,15,30]
+    elif v_ego_kph < 20:  # 30
+        xp = [5,10,20]
         fp2 = [1,3,5]
         limit_steers = interp( v_ego_kph, xp, fp2 )
         self.angle_steers_des_mpc = self.limit_ctrl( org_angle_steers_des, limit_steers, angle_steers )
