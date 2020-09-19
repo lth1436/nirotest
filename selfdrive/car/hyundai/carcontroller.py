@@ -65,7 +65,7 @@ class CarController():
     self.traceCC = trace1.Loger("CarController")
 
 
-    self.fingerprint_issued_fix = self.params.get("FingerprintIssuedFix", encoding='utf8') == "1"
+    self.fingerprint_issued_fix = int(self.params.get("FingerprintIssuedFix", encoding='utf8'))
 
 
   def limit_ctrl(self, value, limit, offset ):
