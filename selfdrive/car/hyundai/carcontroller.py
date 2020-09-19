@@ -165,7 +165,7 @@ class CarController():
     if path_plan.laneChangeState != LaneChangeState.off:
       self.steer_torque_over_timer = 0
     elif CS.out.leftBlinker or CS.out.rightBlinker:
-      sec_mval = 2  # 오파 => 운전자.
+      sec_mval = 0.5  # 오파 => 운전자.
       sec_pval = 10 # 운전자 => 오파  (sec)
 
     if v_ego_kph > 5 and CS.out.steeringPressed:  #사용자 핸들 토크
@@ -174,14 +174,14 @@ class CarController():
           param.STEER_MAX = SteerLimitParams.STEER_MAX
           self.steer_torque_over_timer = 0
         else:
-          sec_mval = 1
+          #sec_mval = 1
           self.steer_torque_over_timer = 50
       elif abs_angle_steers > 5 and CS.out.steeringTorque > STEER_THRESHOLD:  #left
         if dst_steer > 0:
           param.STEER_MAX = SteerLimitParams.STEER_MAX
           self.steer_torque_over_timer = 0
         else:
-          sec_mval = 1
+          #sec_mval = 1
           self.steer_torque_over_timer = 50       
       else:
         self.steer_torque_over_timer = 50
