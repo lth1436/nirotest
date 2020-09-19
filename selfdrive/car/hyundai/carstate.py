@@ -387,18 +387,18 @@ class CarState(CarStateBase):
 
     checks = [
       # address, frequency
-      ("MDPS12", 50),    # 593
+      ("MDPS12", 50),    # 593    #
       ("TCS13", 50),    # 916
-      ("TCS15", 10),
-      ("CLU11", 50),
-      ("ESP12", 100),
-      ("CGW1", 10),
-      ("CGW4", 5),
+      ("TCS15", 10),    # 1287
+      ("CLU11", 50),    # 1265
+      ("ESP12", 100),   # 544
+      ("CGW1", 10),     # 1345
+      ("CGW4", 5),      # 1369
       ("WHL_SPD11", 50),  # 902
-      ("SAS11", 100),
-      ("SCC11", 50),
+      ("SAS11", 100),     # 688   #
+      ("SCC11", 50),      # 1056
       ("SCC12", 50),     # 1057
-      ("LCA11", 50),
+      ("LCA11", 50),     # 1419
     ]
 
     signals, checks = CarState.get_parser_ev_hybrid( CP, signals, checks )
