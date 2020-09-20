@@ -143,7 +143,13 @@ class PathPlanner():
       if nPos > 10:
         break
 
-    steerRatio = interp( v_ego_kph, self.sr_KPH, self.sr_SteerRatio )
+    
+    try:
+      steerRatio = interp( v_ego_kph, self.sr_KPH, self.sr_SteerRatio )
+    except:
+      steerRatio = self.steerRatio
+    finally:  # try end 
+      pass
 
     return steerRatio
 
