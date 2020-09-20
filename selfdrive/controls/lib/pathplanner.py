@@ -147,7 +147,7 @@ class PathPlanner():
     try:
       steerRatio = interp( v_ego_kph, self.sr_KPH, self.sr_SteerRatio )
     except:
-      steerRatio = self.steerRatio
+      steerRatio = max( 10, self.steerRatio )
     finally:  # try end 
       pass
 
