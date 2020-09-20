@@ -166,7 +166,12 @@ class PathPlanner():
       if nPos > 10:
         break
 
-    actuatorDelay = interp( v_ego_kph, self.sr_KPH, self.sr_ActuatorDelay )
+    try:
+      actuatorDelay = interp( v_ego_kph, self.sr_KPH, self.sr_ActuatorDelay )
+    except:
+      actuatorDelay = 0.1
+    finally:  # try end 
+      pass
 
     return actuatorDelay
 
