@@ -388,8 +388,8 @@ class PathPlanner():
           self.angle_steers_des_mpc = self.limit_ctrl( org_angle_steers_des, limit_steers, angle_steers )
 
     elif v_ego_kph < 30:  # 30
-      xp = [10,20,30]
-      fp2 = [1,3,5]
+      xp = [3,10,15]
+      fp2 = [3,5,7]
       limit_steers = interp( v_ego_kph, xp, fp2 )
       self.angle_steers_des_mpc = self.limit_ctrl( org_angle_steers_des, limit_steers, angle_steers )
 
@@ -433,7 +433,8 @@ class PathPlanner():
 
     plan_send.pathPlan.angleSteers = float(self.angle_steers_des_mpc)
     plan_send.pathPlan.rateSteers = float(rate_desired)
-    plan_send.pathPlan.angleOffset = float(angleOffsetAverage)
+#    plan_send.pathPlan.angleOffset = float(angleOffsetAverage)
+    plan_send.pathPlan.angleOffset = float(sm['liveParameters']angleOffset)
     plan_send.pathPlan.mpcSolutionValid = bool(plan_solution_valid)
     plan_send.pathPlan.paramsValid = bool(sm['liveParameters'].valid)
 
