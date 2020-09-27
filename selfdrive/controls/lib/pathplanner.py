@@ -442,8 +442,7 @@ class PathPlanner():
 
     plan_send.pathPlan.angleSteers = float(self.angle_steers_des_mpc)
     plan_send.pathPlan.rateSteers = float(rate_desired)
-#    plan_send.pathPlan.angleOffset = float(angleOffsetAverage)
-    plan_send.pathPlan.angleOffset = float(sm['liveParameters']angleOffset)
+    plan_send.pathPlan.angleOffset = float(angle_offset)#(angleOffsetAverage)
     plan_send.pathPlan.mpcSolutionValid = bool(plan_solution_valid)
     plan_send.pathPlan.paramsValid = bool(sm['liveParameters'].valid)
 
