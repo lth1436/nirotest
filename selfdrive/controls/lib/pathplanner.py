@@ -140,7 +140,7 @@ class PathPlanner():
     for steerRatio in self.sr_BPV:  # steerRatio
       self.sr_SteerRatio.append( interp( sr_value, steerRatio, self.sr_steerRatioV[nPos] ) )
       nPos += 1
-      if nPos > 10:
+      if nPos > 20:
         break
 
     
@@ -231,9 +231,9 @@ class PathPlanner():
     angleOffsetAverage = sm['liveParameters'].angleOffsetAverage
     stiffnessFactor = sm['liveParameters'].stiffnessFactor
 
-    if (self.atom_timer_cnt % 100) == 0:
-      str_log3 = 'angleOffset={:.1f} angleOffsetAverage={:.3f} steerRatio={:.2f} stiffnessFactor={:.3f} '.format( angle_offset, angleOffsetAverage, self.steerRatio, stiffnessFactor )
-      self.trLearner.add( 'LearnerParam {}  carParams={}'.format( str_log3, self.carParams_valid ) )       
+#    if (self.atom_timer_cnt % 100) == 0:
+#      str_log3 = 'angleOffset={:.1f} angleOffsetAverage={:.3f} steerRatio={:.2f} stiffnessFactor={:.3f} '.format( angle_offset, angleOffsetAverage, self.steerRatio, stiffnessFactor )
+#      self.trLearner.add( 'LearnerParam {}  carParams={}'.format( str_log3, self.carParams_valid ) )       
 
     if lateralsRatom.learnerParams:
       pass
@@ -245,8 +245,10 @@ class PathPlanner():
       else:
         self.steer_rate_cost = CP.steerRateCost
         self.steerRatio = CP.steerRatio
-   
-      
+    
+      #xp = [-5,0,5]
+      #fp = [0.4, 0.7, 0.4] 
+      #self.steer_rate_cost = interp( angle_steers, xp, fp )
       steerRatio = self.atom_tune( v_ego_kph, angle_steers, atomTuning )
       self.steerRatio = self.atom_steer( steerRatio, 2, 0.05 )
 
@@ -311,8 +313,8 @@ class PathPlanner():
       # starting
       elif self.lane_change_state == LaneChangeState.laneChangeStarting:
         # fade out over .5s
-        xp = [40,60,70,80]
-        fp2 = [0.5,1,1.5,2]
+        xp = [40,50,60,70]
+        fp2 = [0.2,0.6,1.2,1.5]
         lane_time = interp( v_ego_kph, xp, fp2 )        
         self.lane_change_ll_prob = max(self.lane_change_ll_prob - lane_time*DT_MDL, 0.0)
         # 98% certainty
@@ -329,11 +331,8 @@ class PathPlanner():
       # done
       elif self.lane_change_state == LaneChangeState.laneChangeDone:
         if not one_blinker:
-         # self.trPATH.add( 'end - pathPlan  l_prob={}  r_prob={}   c_prob={}'.format( l_poly, r_poly, c_prob ) )
           self.lane_change_state = LaneChangeState.off
           
-     # if self.lane_change_state != LaneChangeState.off:
-     #   self.trPATH.add( 'pathPlan  l_prob={}  r_prob={}   c_prob={}'.format( l_poly, r_poly, c_prob ) )
 
 
     if self.lane_change_state in [LaneChangeState.off, LaneChangeState.preLaneChange]:
@@ -376,7 +375,7 @@ class PathPlanner():
 
     # atom
     if steeringPressed:
-      delta_steer = self.angle_steers_des_mpc - angle_steers
+      delta_steer = org_angle_steers_des_mpc - angle_steers
       xp = [-255,0,255]
       fp2 = [5,0,5]
       limit_steers = interp( steeringTorque, xp, fp2 )
@@ -387,7 +386,7 @@ class PathPlanner():
         if delta_steer < 0:
           self.angle_steers_des_mpc = self.limit_ctrl( org_angle_steers_des, limit_steers, angle_steers )
 
-    elif v_ego_kph < 30:  # 30
+    elif v_ego_kph < 15:  # 30
       xp = [3,10,15]
       fp2 = [3,5,7]
       limit_steers = interp( v_ego_kph, xp, fp2 )
@@ -403,7 +402,15 @@ class PathPlanner():
       limit_steers1 = interp( model_sum, xp, fp1 )  # +
       limit_steers2 = interp( model_sum, xp, fp2 )  # -
       self.angle_steers_des_mpc = self.limit_ctrl1( org_angle_steers_des, limit_steers1, limit_steers2, angle_steers )
-      
+
+    # 최대 허용 제어 조향각.
+    delta_steer = self.angle_steers_des_mpc - angle_steers
+    if delta_steer > 10:
+      p_angle_steers = angle_steers + 10
+      self.angle_steers_des_mpc = p_angle_steers
+    elif delta_steer < -10:
+      m_angle_steers = angle_steers - 10
+      self.angle_steers_des_mpc = m_angle_steers
 
     #  Check for infeasable MPC solution
     mpc_nans = any(math.isnan(x) for x in self.mpc_solution[0].delta)
@@ -415,6 +422,8 @@ class PathPlanner():
       if t > self.last_cloudlog_t + 5.0:
         self.last_cloudlog_t = t
         cloudlog.warning("Lateral mpc - nan: True")
+
+    #self.trPATH.add( 'mpc_nans ={}  libmpc  steer_rate_cost={}  delta={}   angle_steers={}'.format( mpc_nans, self.steer_rate_cost, self.cur_state[0].delta, angle_steers ) )
 
     if self.mpc_solution[0].cost > 20000. or mpc_nans:   # TODO: find a better way to detect when MPC did not converge
       self.solution_invalid_cnt += 1
@@ -445,9 +454,9 @@ class PathPlanner():
     plan_send.pathPlan.steerActuatorDelay = steerActuatorDelay
     pm.send('pathPlan', plan_send)
 
-    if self.solution_invalid_cnt > 0:
-      str_log3 = 'v_ego_kph={:.1f} angle_steers_des_mpc={:.1f} angle_steers={:.1f} solution_invalid_cnt={:.0f} mpc_solution={:.1f}/{:.0f}'.format( v_ego_kph, self.angle_steers_des_mpc, angle_steers, self.solution_invalid_cnt, self.mpc_solution[0].cost, mpc_nans )
-      self.trpathPlan.add( 'pathPlan {}  LOG_MPC={}'.format( str_log3, LOG_MPC ) ) 
+#    if self.solution_invalid_cnt > 0:
+#      str_log3 = 'v_ego_kph={:.1f} angle_steers_des_mpc={:.1f} angle_steers={:.1f} solution_invalid_cnt={:.0f} mpc_solution={:.1f}/{:.0f}'.format( v_ego_kph, self.angle_steers_des_mpc, angle_steers, self.solution_invalid_cnt, self.mpc_solution[0].cost, mpc_nans )
+#      self.trpathPlan.add( 'pathPlan {}  LOG_MPC={}'.format( str_log3, LOG_MPC ) ) 
 
 
     if LOG_MPC:
