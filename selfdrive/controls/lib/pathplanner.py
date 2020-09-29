@@ -375,7 +375,7 @@ class PathPlanner():
 
     # atom
     if steeringPressed:
-      delta_steer = org_angle_steers_des_mpc - angle_steers
+      delta_steer = org_angle_steers_des - angle_steers
       xp = [-255,0,255]
       fp2 = [5,0,5]
       limit_steers = interp( steeringTorque, xp, fp2 )
@@ -405,11 +405,12 @@ class PathPlanner():
 
     # 최대 허용 제어 조향각.
     delta_steer = self.angle_steers_des_mpc - angle_steers
-    if delta_steer > 10:
-      p_angle_steers = angle_steers + 10
+    ANGLE_LIMIT = 8
+    if delta_steer > ANGLE_LIMIT:
+      p_angle_steers = angle_steers + ANGLE_LIMIT
       self.angle_steers_des_mpc = p_angle_steers
-    elif delta_steer < -10:
-      m_angle_steers = angle_steers - 10
+    elif delta_steer < -ANGLE_LIMIT:
+      m_angle_steers = angle_steers - ANGLE_LIMIT
       self.angle_steers_des_mpc = m_angle_steers
 
     #  Check for infeasable MPC solution
