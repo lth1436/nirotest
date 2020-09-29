@@ -412,7 +412,7 @@ EVENTS = {
       "Steer Left to Start Lane Change",
       "Monitor Other Vehicles",
       AlertStatus.normal, AlertSize.mid,
-      Priority.LOW, VisualAlert.steerRequired, AudibleAlert.none, .0, .0, .0),
+      Priority.LOW, VisualAlert.steerRequired, AudibleAlert.none, .0, .1, .0, alert_rate=0.75),
   },
 
   EventName.preLaneChangeRight: {
@@ -420,7 +420,7 @@ EVENTS = {
       "Steer Right to Start Lane Change",
       "Monitor Other Vehicles",
       AlertStatus.normal, AlertSize.mid,
-      Priority.LOW, VisualAlert.steerRequired, AudibleAlert.none, .0, .0, .0),#, alert_rate=0.75),
+      Priority.LOW, VisualAlert.steerRequired, AudibleAlert.none, .0, .1, .0, alert_rate=0.75),
   },
 
   EventName.laneChangeBlocked: {
@@ -428,7 +428,7 @@ EVENTS = {
       "Car Detected in Blindspot",
       "Monitor Other Vehicles",
       AlertStatus.userPrompt, AlertSize.mid,
-      Priority.LOW, VisualAlert.steerRequired, AudibleAlert.chimePrompt, .0, .1, .1),
+      Priority.LOW, VisualAlert.steerRequired, AudibleAlert.chimePrompt, 1., 2., 3.),
   },  
 
   EventName.laneChange: {
@@ -436,7 +436,7 @@ EVENTS = {
       "Changing Lane",
       "Monitor Other Vehicles",
       AlertStatus.normal, AlertSize.mid,
-      Priority.LOW, VisualAlert.steerRequired, AudibleAlert.none, .0, .0, .0, alert_rate=0.75),
+      Priority.LOW, VisualAlert.steerRequired, AudibleAlert.none, .0, .1, .0, alert_rate=0.75),
   },
 
   EventName.laneChangeManual: {
@@ -452,7 +452,7 @@ EVENTS = {
       "TAKE CONTROL",
       "비상 점멸등 작동중",
       AlertStatus.userPrompt, AlertSize.mid,
-      Priority.LOW, VisualAlert.steerRequired, AudibleAlert.none, .0, .1, .1, alert_rate=0.75),
+      Priority.LOW, VisualAlert.steerRequired, AudibleAlert.chimePrompt, .0, .1, .1, alert_rate=0.75),
   },  
 
 
