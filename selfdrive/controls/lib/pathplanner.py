@@ -15,6 +15,7 @@ import common.log as trace1
 
 from selfdrive.car.hyundai.values import Buttons
 
+import common.MoveAvg as ma
 
 LaneChangeState = log.PathPlan.LaneChangeState
 LaneChangeDirection = log.PathPlan.LaneChangeDirection
@@ -95,6 +96,8 @@ class PathPlanner():
 
     self.carParams_valid = False
 
+    self.m_avg = ma.MoveAvg()
+
   def limit_ctrl(self, value, limit, offset ):
       p_limit = offset + limit
       m_limit = offset - limit
@@ -143,13 +146,7 @@ class PathPlanner():
       if nPos > 20:
         break
 
-    
-    try:
-      steerRatio = interp( v_ego_kph, self.sr_KPH, self.sr_SteerRatio )
-    except:
-      steerRatio = max( 10, self.steerRatio )
-    finally:  # try end 
-      pass
+    steerRatio = interp( v_ego_kph, self.sr_KPH, self.sr_SteerRatio )
 
     return steerRatio
 
@@ -166,12 +163,7 @@ class PathPlanner():
       if nPos > 10:
         break
 
-    try:
-      actuatorDelay = interp( v_ego_kph, self.sr_KPH, self.sr_ActuatorDelay )
-    except:
-      actuatorDelay = 0.1
-    finally:  # try end 
-      pass
+    actuatorDelay = interp( v_ego_kph, self.sr_KPH, self.sr_ActuatorDelay )
 
     return actuatorDelay
 
@@ -342,6 +334,7 @@ class PathPlanner():
 
 
 
+
     self.prev_one_blinker = one_blinker
 
     desire = DESIRES[self.lane_change_direction][self.lane_change_state]
@@ -359,6 +352,8 @@ class PathPlanner():
     self.libmpc.run_mpc(self.cur_state, self.mpc_solution,
                         list(self.LP.l_poly), list(self.LP.r_poly), list(self.LP.d_poly),
                         self.LP.l_prob, self.LP.r_prob, curvature_factor, v_ego_mpc, self.LP.lane_width)
+
+
 
     # reset to current steer angle if not active or overriding
     if active:
@@ -413,12 +408,15 @@ class PathPlanner():
       m_angle_steers = angle_steers - ANGLE_LIMIT
       self.angle_steers_des_mpc = m_angle_steers
 
+
+
     #  Check for infeasable MPC solution
     mpc_nans = any(math.isnan(x) for x in self.mpc_solution[0].delta)
     t = sec_since_boot()
     if mpc_nans:
       self.libmpc.init(MPC_COST_LAT.PATH, MPC_COST_LAT.LANE, MPC_COST_LAT.HEADING, self.steer_rate_cost)
       self.cur_state[0].delta = math.radians(angle_steers - angle_offset) / VM.sR
+
 
       if t > self.last_cloudlog_t + 5.0:
         self.last_cloudlog_t = t
