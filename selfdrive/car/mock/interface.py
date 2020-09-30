@@ -45,43 +45,6 @@ class CarInterface(CarInterfaceBase):
     ret.tireStiffnessFront = 1e6    # very stiff to neglect slip
     ret.tireStiffnessRear = 1e6     # very stiff to neglect slip
 
-    self.sR_KPH         = [30, 40, 80]   # Speed  kph
-    self.sR_BPV         = [[0.],      [0.],      [0.]     ]
-    self.sR_steerRatioV = [[13.95,13.85,13.95],[13.95,13.85,13.95],[13.95,13.85,13.95]]
-    self.sR_ActuatorDelayV = [[0.25,0.5,0.25],[0.25,0.8,0.25],[0.25,0.8,0.25]]
-    self.sR_pid_KiV     = [[0.02,0.01,0.02],[0.03,0.02,0.03],[0.03,0.02,0.03]]
-    self.sR_pid_KpV     = [[0.20,0.15,0.20],[0.25,0.20,0.25],[0.25,0.20,0.25]]
-    self.sR_pid_deadzone  = 0.1
-    self.sR_lqr_kiV     = [[0.005],   [0.015],   [0.02]   ]
-    self.sR_lqr_scaleV  = [[2000],    [1900.0],  [1850.0] ]
-
-    self.cv_KPH    = [0.]   # Speed  kph
-    self.cv_BPV    = [[150., 255.]]  # CV
-    self.cv_sMaxV  = [[255., 230.]]
-    self.cv_sdUPV  = [[3,3]]
-    self.cv_sdDNV  = [[7,5]]
-
-    ret.atomTuning.cvKPH    = [0.] 
-    ret.atomTuning.cvBPV    = [[150., 255.]]  # CV
-    ret.atomTuning.cvsMaxV  = [[255., 230.]]
-    ret.atomTuning.cvsdUpV  = [[3,3]]
-    ret.atomTuning.cvsdDnV  = [[7,5]]
-    
-    ret.atomTuning.sRKPH     = [30, 40, 80]   # Speed  kph
-    ret.atomTuning.sRBPV     = [[0.],      [0.],      [0.]     ]
-    ret.atomTuning.sRlqrkiV      = [[0.005],   [0.015],   [0.02]   ]
-    ret.atomTuning.sRlqrscaleV   = [[2000],    [1900.0],  [1850.0] ]
-    ret.atomTuning.sRpidKiV      = [[0.02,0.01,0.02],[0.03,0.02,0.03],[0.03,0.02,0.03]]
-    ret.atomTuning.sRpidKpV      = [[0.20,0.15,0.20],[0.25,0.20,0.25],[0.25,0.20,0.25]]
-    ret.atomTuning.sRsteerRatioV = [[13.95,13.85,13.95],[13.95,13.85,13.95],[13.95,13.85,13.95]]
-    ret.atomTuning.sRsteerActuatorDelayV = [[0.25,0.5,0.25],[0.25,0.8,0.25],[0.25,0.8,0.25]]
-  
-    ret.lateralsRatom.deadzone = 0.1
-    ret.lateralsRatom.steerOffset = 0
-    ret.lateralsRatom.cameraOffset = 0
-    ret.steerRateCost = 0.4
-    ret.steerLimitTimer = 0.8
-
     return ret
 
   # returns a car.CarState
