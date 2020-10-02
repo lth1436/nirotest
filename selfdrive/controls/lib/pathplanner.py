@@ -25,7 +25,7 @@ LOG_MPC = os.environ.get('LOG_MPC', True)
 
 LANE_CHANGE_SPEED_MIN = 40 * CV.KPH_TO_MS
 LANE_CHANGE_TIME_MAX = 10.
-DST_ANGLT_LIMIT = 8.
+DST_ANGLE_LIMIT = 8.
 
 DESIRES = {
   LaneChangeDirection.none: {
@@ -383,7 +383,7 @@ class PathPlanner():
       elif angle_steera < -10 and steeringTorque < 0:
         delta_steer = min( delta_steer, 0 )
         delta_steer = max( delta_steer, -DST_ANGLE_LIMIT )
-        self.angle_steers_des>mpc = angle_steers + delta_steer
+        self.angle_steers_des_mpc = angle_steers + delta_steer
       else:
         if steeringTorque < 0:  # right
           if delta_steer > 0:
@@ -400,7 +400,7 @@ class PathPlanner():
 
     elif v_ego_kph > 60:
       pass
-    elif abs(angle_steers) > 10: # angle steer > 10
+    elif abs(angle_steers) > 50: # angle steer > 50
       # 2.
       xp = [-10,-5,0,5,10]    # 5  10=>28 15=>35, 30=>52
       fp1 = [3,8,10,20,10]    # +

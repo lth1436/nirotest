@@ -82,7 +82,7 @@ int main(int argc, char *argv[]) {
         LOGW(log.c_str());
 
         if( carParams_learnerParams )
-          sR = json["steerRatio"].numver_value();
+          sR = json["steerRatio"].number_value();
 
 	      x = json["stiffnessFactor"].number_value();
         ao = json["angleOffsetAverage"].number_value();

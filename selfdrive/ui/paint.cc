@@ -475,6 +475,38 @@ static void ui_draw_vision_lanes(UIState *s) {
     update_all_lane_lines_data(s, scene->model.right_lane, pvd + MODEL_LANE_PATH_CNT);
     s->model_changed = false;
   }
+  
+  float  left_lane =  fmax( 0.1, scene->model.left_lane.prob );
+  float  right_lane =  fmax( 0.1, scene->model.right_lane.prob );
+  NVGcolor colorLeft = nvgRGBAf(1.0, 1.0, 1.0, left_lane );
+  NVGcolor colorRight = nvgRGBAf(1.0, 1.0, 1.0, right_lane );
+
+  if( scene->leftBlinker )
+  {
+    if( scene->leftBlindspot )
+      colorLeft  = nvgRGBAf(1.0, 0.2, 0.2, left_lane );
+    else
+      colorLeft  = nvgRGBAf(0.2, 0.2, 1.0, left_lane );    
+  }
+  else if( scene->leftBlindspot )
+  {
+    colorLeft  = nvgRGBAf(1.0, 0.5, 0.5, left_lane );
+  }
+                
+
+  if( scene->rightBlinker )
+  {
+    if( scene->rightBlindspot )
+        colorRight  = nvgRGBAf(1.0, 0.2, 0.2, right_lane );
+    else
+        colorRight  = nvgRGBAf(0.2, 0.2, 1.0, right_lane ); 
+  }
+  else if( scene->rightBlindspot )
+  {
+    colorRight  = nvgRGBAf(1.0, 0.5, 0.5, right_lane );
+  }
+
+
   // Draw left lane edge
   ui_draw_lane(
       s, &scene->model.left_lane,
