@@ -193,4 +193,4 @@ DBC = {
   CAR.NIRO_EV: dbc_dict('hyundai_kia_generic', None),  
 }
 
-STEER_THRESHOLD = 400
+STEER_THRESHOLD = 700

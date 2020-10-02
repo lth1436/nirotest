@@ -29,7 +29,7 @@ def eval_poly(poly, x):
 def calc_d_poly(l_poly, r_poly, p_poly, l_prob, r_prob, lane_width, v_ego):
   # This will improve behaviour when lanes suddenly widen
   # these numbers were tested on 2000segments and found to work well
-  lane_width = min(4.0, lane_width)
+  lane_width = min(3.5, lane_width)
   width_poly = l_poly - r_poly
   prob_mods = []
   for t_check in [0.0, 1.5, 3.0]:
@@ -40,9 +40,9 @@ def calc_d_poly(l_poly, r_poly, p_poly, l_prob, r_prob, lane_width, v_ego):
   r_prob = mod * r_prob
 
   path_from_left_lane = l_poly.copy()
-  path_from_left_lane[3] -= lane_width / 2.0
+  path_from_left_lane[3] -= lane_width / 0.9
   path_from_right_lane = r_poly.copy()
-  path_from_right_lane[3] += lane_width / 2.0
+  path_from_right_lane[3] += lane_width / 0.9
 
   lr_prob = l_prob + r_prob - l_prob * r_prob
 
@@ -95,7 +95,7 @@ class LanePlanner():
     self.lane_width_certainty += 0.05 * (self.l_prob * self.r_prob - self.lane_width_certainty)
     current_lane_width = abs(self.l_poly[3] - self.r_poly[3])
     self.lane_width_estimate += 0.005 * (current_lane_width - self.lane_width_estimate)
-    speed_lane_width = interp(v_ego, [0., 31.], [2.75, 3.6])
+    speed_lane_width = interp(v_ego, [0., 31.], [2.5, 3.5])
     self.lane_width = self.lane_width_certainty * self.lane_width_estimate + \
                       (1 - self.lane_width_certainty) * speed_lane_width
 

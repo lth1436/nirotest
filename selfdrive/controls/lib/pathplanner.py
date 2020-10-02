@@ -11,11 +11,11 @@ from common.numpy_fast import interp
 import cereal.messaging as messaging
 from cereal import log
 from selfdrive.car.hyundai.interface import CarInterface
-import common.log as trace1
-
 from selfdrive.car.hyundai.values import Buttons
 
+import common.log as trace1
 import common.MoveAvg as ma
+
 
 LaneChangeState = log.PathPlan.LaneChangeState
 LaneChangeDirection = log.PathPlan.LaneChangeDirection
@@ -25,6 +25,7 @@ LOG_MPC = os.environ.get('LOG_MPC', True)
 
 LANE_CHANGE_SPEED_MIN = 40 * CV.KPH_TO_MS
 LANE_CHANGE_TIME_MAX = 10.
+DST_ANGLT_LIMIT = 8.
 
 DESIRES = {
   LaneChangeDirection.none: {
@@ -305,8 +306,8 @@ class PathPlanner():
       # starting
       elif self.lane_change_state == LaneChangeState.laneChangeStarting:
         # fade out over .5s
-        xp = [40,50,60,70]
-        fp2 = [0.2,0.6,1.2,1.5]
+        xp = [40,80]
+        fp2 = [1,2]
         lane_time = interp( v_ego_kph, xp, fp2 )        
         self.lane_change_ll_prob = max(self.lane_change_ll_prob - lane_time*DT_MDL, 0.0)
         # 98% certainty
@@ -317,7 +318,7 @@ class PathPlanner():
       elif self.lane_change_state == LaneChangeState.laneChangeFinishing:
         # fade in laneline over 1s
         self.lane_change_ll_prob = min(self.lane_change_ll_prob + DT_MDL, 1.0)
-        if self.lane_change_ll_prob > 0.99 and abs(c_prob) < 0.3:
+        if self.lane_change_ll_prob > 0.6 and abs(c_prob) < 0.3:
           self.lane_change_state = LaneChangeState.laneChangeDone
 
       # done
@@ -325,7 +326,6 @@ class PathPlanner():
         if not one_blinker:
           self.lane_change_state = LaneChangeState.off
           
-
 
     if self.lane_change_state in [LaneChangeState.off, LaneChangeState.preLaneChange]:
       self.lane_change_run_timer = 0.0
@@ -369,17 +369,28 @@ class PathPlanner():
     org_angle_steers_des = self.angle_steers_des_mpc
 
     # atom
-    if steeringPressed:
+    if self.lane_change_state == LaneChangeState.laneChangeStarting:
+      xp = [40,70]
+      fp2 = [2,8]
+      limit_steers = interp( v_ego_kph, xp, fp2 )
+      self.angle_steers_des_mpc = self.limit_ctrl( org_angle_steers_des, limit_steers, angle_steers )      
+    elif steeringPressed:
       delta_steer = org_angle_steers_des - angle_steers
-      xp = [-255,0,255]
-      fp2 = [5,0,5]
-      limit_steers = interp( steeringTorque, xp, fp2 )
-      if steeringTorque < 0:  # right
-        if delta_steer > 0:
-          self.angle_steers_des_mpc = self.limit_ctrl( org_angle_steers_des, limit_steers, angle_steers )
-      elif steeringTorque > 0:  # left
-        if delta_steer < 0:
-          self.angle_steers_des_mpc = self.limit_ctrl( org_angle_steers_des, limit_steers, angle_steers )
+      if angle_steer > 10 and steeringTorque > 0:
+        delta_steer = max( delta_steer, 0 )
+        delta_steer = min( delta_steer, DST_ANGLE_LIMIT )
+        self.angle_steers_des_mpc = angle_steers + dleta_steer
+      elif angle_steera < -10 and steeringTorque < 0:
+        delta_steer = min( delta_steer, 0 )
+        delta_steer = max( delta_steer, -DST_ANGLE_LIMIT )
+        self.angle_steers_des>mpc = angle_steers + delta_steer
+      else:
+        if steeringTorque < 0:  # right
+          if delta_steer > 0:
+            self.angle_steers_des_mpc = self.limit_ctrl( org_angle_steers_des, DST_ANGLE_LIMIT, angle_steers )
+        elif steeringTorque > 0:  # left
+          if delta_steer < 0:
+            self.angle_steers_des_mpc = self.limit_ctrl( org_angle_steers_des, DST_ANGLE_LIMIT, angle_steers )
 
     elif v_ego_kph < 15:  # 30
       xp = [3,10,15]
@@ -400,12 +411,11 @@ class PathPlanner():
 
     # 최대 허용 제어 조향각.
     delta_steer = self.angle_steers_des_mpc - angle_steers
-    ANGLE_LIMIT = 8
-    if delta_steer > ANGLE_LIMIT:
-      p_angle_steers = angle_steers + ANGLE_LIMIT
+    if delta_steer > DST_ANGLE_LIMIT:
+      p_angle_steers = angle_steers + DST_ANGLE_LIMIT
       self.angle_steers_des_mpc = p_angle_steers
-    elif delta_steer < -ANGLE_LIMIT:
-      m_angle_steers = angle_steers - ANGLE_LIMIT
+    elif delta_steer < -DST_ANGLE_LIMIT:
+      m_angle_steers = angle_steers - DST_ANGLE_LIMIT
       self.angle_steers_des_mpc = m_angle_steers
 
 

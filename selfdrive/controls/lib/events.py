@@ -409,18 +409,18 @@ EVENTS = {
 
   EventName.preLaneChangeLeft: {
     ET.WARNING: Alert(
-      "Steer Left to Start Lane Change",
-      "Monitor Other Vehicles",
+      "차선 변경 시작",
+      "주변 차량을 주의하세요.",
       AlertStatus.normal, AlertSize.mid,
-      Priority.LOW, VisualAlert.steerRequired, AudibleAlert.chimePrompt, .0, .1, .1),#, alert_rate=0.75),
+      Priority.LOW, VisualAlert.steerRequired, AudibleAlert.chimePrompt, 1., .0, 1.),#, alert_rate=0.75),
   },
 
   EventName.preLaneChangeRight: {
     ET.WARNING: Alert(
-      "Steer Right to Start Lane Change",
-      "Monitor Other Vehicles",
+      "오른차선 변경 시작",
+      "주변 차량을 주의하세요.",
       AlertStatus.normal, AlertSize.mid,
-      Priority.LOW, VisualAlert.steerRequired, AudibleAlert.chimePrompt, .0, .1, .1),#, alert_rate=0.75),
+      Priority.LOW, VisualAlert.steerRequired, AudibleAlert.chimePrompt, 1., .0, 1.),#, alert_rate=0.75),
   },
 
   EventName.laneChangeBlocked: {
@@ -428,15 +428,15 @@ EVENTS = {
       "Car Detected in Blindspot",
       "Monitor Other Vehicles",
       AlertStatus.userPrompt, AlertSize.mid,
-      Priority.LOW, VisualAlert.steerRequired, AudibleAlert.chimePrompt, 1., 2., 3.),
+      Priority.LOW, VisualAlert.steerRequired, AudibleAlert.chimePrompt, 1., .0, 1.),
   },  
 
   EventName.laneChange: {
     ET.WARNING: Alert(
-      "Changing Lane",
-      "Monitor Other Vehicles",
+      "차선 변경중",
+      "주변 차량을 주의하세요",
       AlertStatus.normal, AlertSize.mid,
-      Priority.LOW, VisualAlert.steerRequired, AudibleAlert.none, .0, .1, .1),#, alert_rate=0.75),
+      Priority.LOW, VisualAlert.steerRequired, AudibleAlert.none, 1., .0, 1.),#, alert_rate=0.75),
   },
 
   EventName.laneChangeManual: {
@@ -452,7 +452,7 @@ EVENTS = {
       "TAKE CONTROL",
       "비상 점멸등 작동중",
       AlertStatus.userPrompt, AlertSize.mid,
-      Priority.LOW, VisualAlert.steerRequired, AudibleAlert.chimePrompt, .0, .1, .1, alert_rate=0.75),
+      Priority.LOW, VisualAlert.steerRequired, AudibleAlert.chimePrompt, .0, .0, .1, alert_rate=0.75),
   },  
 
 
@@ -462,7 +462,7 @@ EVENTS = {
       "TAKE CONTROL",
       "Turn Exceeds Steering Limit",
       AlertStatus.userPrompt, AlertSize.mid,
-      Priority.LOW, VisualAlert.steerRequired, AudibleAlert.chimePrompt, 1., 2., 3.),
+      Priority.LOW, VisualAlert.steerRequired, AudibleAlert.chimePrompt, 1., .0, 2.),
   },
 
 

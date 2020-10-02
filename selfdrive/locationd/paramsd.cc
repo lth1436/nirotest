@@ -81,10 +81,10 @@ int main(int argc, char *argv[]) {
         std::string log = "Parameter starting with: " + str;
         LOGW(log.c_str());
 
-        if ( carParams_learnerParams )
-	    sR = json["steerRatio"].number_value();
+        if( carParams_learnerParams )
+          sR = json["steerRatio"].numver_value();
 
-	x = json["stiffnessFactor"].number_value();
+	      x = json["stiffnessFactor"].number_value();
         ao = json["angleOffsetAverage"].number_value();
       }
     }
