@@ -487,7 +487,7 @@ static void ui_draw_vision_lanes(UIState *s) {
     if( scene->leftBlindspot )
       colorLeft  = nvgRGBAf(1.0, 0.2, 0.2, 1.0 );
     else
-      colorLeft  = nvgRGBAf(0.2, 0.2, 1.0, left_lane );    
+      colorLeft  = nvgRGBAf(0.2, 0.2, 1.0, 1.0 );    
   }
   else if( scene->leftBlindspot )
   {
@@ -499,7 +499,7 @@ static void ui_draw_vision_lanes(UIState *s) {
     if( scene->rightBlindspot )
         colorRight  = nvgRGBAf(1.0, 0.2, 0.2, 1.0 );
     else
-        colorRight  = nvgRGBAf(0.2, 0.2, 1.0, right_lane ); 
+        colorRight  = nvgRGBAf(0.2, 0.2, 1.0, 1.0 ); 
   }
   else if( scene->rightBlindspot )
   {
@@ -534,12 +534,14 @@ static void ui_draw_vision_lanes(UIState *s) {
   if (scene->engaged) {
     // Draw MPC path when engaged
     ui_draw_track(s, true, &s->track_vertices[1]);    
+    /*
     if (scene->rightBlindspot){
       ui_draw_track_right(s, true, &s->track_vertices[1]);
     }
     if (scene->leftBlindspot){
       ui_draw_track_left(s, true, &s->track_vertices[1]);
     }      
+    */
   }
 }
 
