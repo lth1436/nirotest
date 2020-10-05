@@ -481,6 +481,7 @@ static void ui_draw_vision_lanes(UIState *s) {
   NVGcolor colorLeft = nvgRGBAf(1.0, 1.0, 1.0, left_lane );
   NVGcolor colorRight = nvgRGBAf(1.0, 1.0, 1.0, right_lane );
 
+
   if( scene->leftBlinker )
   {
     if( scene->leftBlindspot )
@@ -491,8 +492,7 @@ static void ui_draw_vision_lanes(UIState *s) {
   else if( scene->leftBlindspot )
   {
     colorLeft  = nvgRGBAf(1.0, 0.5, 0.5, left_lane );
-  }
-                
+  }              
 
   if( scene->rightBlinker )
   {
@@ -506,6 +506,11 @@ static void ui_draw_vision_lanes(UIState *s) {
     colorRight  = nvgRGBAf(1.0, 0.5, 0.5, right_lane );
   }
 
+  if( scene->nTimer & 0x01 )
+  {
+     colorLeft = nvgRGBAf(1.0, 1.0, 1.0, left_lane );
+     colorRight = nvgRGBAf(1.0, 1.0, 1.0, right_lane );
+  }
 
   // Draw left lane edge
   ui_draw_lane(
