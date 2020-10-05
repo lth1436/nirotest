@@ -44,6 +44,7 @@ class CarState(CarStateBase):
     self.TSigRHSw = 0
     self.driverAcc_time = 0
 
+    self.cruiseGapSet = 0
     self.gearShifter = 0
     self.leftBlindspot_time = 0
     self.rightBlindspot_time = 0
@@ -83,6 +84,7 @@ class CarState(CarStateBase):
 
     ret.leftBlinker, ret.rightBlinker = self.update_blinker(cp)
 
+    self.cruiseGapSet = cp.vl["SCC11"]['TauGapSet']
 
     self.lead_distance = cp_scc.vl["SCC11"]['ACC_ObjDist']
     lead_objspd = cp_scc.vl["SCC11"]['ACC_ObjRelSpd']
@@ -376,6 +378,7 @@ class CarState(CarStateBase):
       ("SCCInfoDisplay", "SCC11", 0),
       ("ACC_ObjDist", "SCC11", 0),
       ("ACC_ObjRelSpd", "SCC11", 0),
+      ("TauGapSet", "SCC11", 4),
       ("ACCMode", "SCC12", 1),
     ]
 

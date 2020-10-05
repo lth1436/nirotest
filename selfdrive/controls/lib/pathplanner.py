@@ -25,7 +25,7 @@ LOG_MPC = os.environ.get('LOG_MPC', True)
 
 LANE_CHANGE_SPEED_MIN = 40 * CV.KPH_TO_MS
 LANE_CHANGE_TIME_MAX = 10.
-DST_ANGLE_LIMIT = 8.
+DST_ANGLE_LIMIT = 7.
 
 DESIRES = {
   LaneChangeDirection.none: {
@@ -371,7 +371,7 @@ class PathPlanner():
     # atom
     if self.lane_change_state == LaneChangeState.laneChangeStarting:
       xp = [40,70]
-      fp2 = [2,8]
+      fp2 = [3,10]
       limit_steers = interp( v_ego_kph, xp, fp2 )
       self.angle_steers_des_mpc = self.limit_ctrl( org_angle_steers_des, limit_steers, angle_steers )      
     elif steeringPressed:
