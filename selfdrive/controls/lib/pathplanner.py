@@ -376,11 +376,11 @@ class PathPlanner():
       self.angle_steers_des_mpc = self.limit_ctrl( org_angle_steers_des, limit_steers, angle_steers )      
     elif steeringPressed:
       delta_steer = org_angle_steers_des - angle_steers
-      if angle_steer > 10 and steeringTorque > 0:
+      if angle_steers > 10 and steeringTorque > 0:
         delta_steer = max( delta_steer, 0 )
         delta_steer = min( delta_steer, DST_ANGLE_LIMIT )
         self.angle_steers_des_mpc = angle_steers + dleta_steer
-      elif angle_steera < -10 and steeringTorque < 0:
+      elif angle_steers < -10 and steeringTorque < 0:
         delta_steer = min( delta_steer, 0 )
         delta_steer = max( delta_steer, -DST_ANGLE_LIMIT )
         self.angle_steers_des_mpc = angle_steers + delta_steer
