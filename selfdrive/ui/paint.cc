@@ -485,7 +485,7 @@ static void ui_draw_vision_lanes(UIState *s) {
   if( scene->leftBlinker )
   {
     if( scene->leftBlindspot )
-      colorLeft  = nvgRGBAf(1.0, 0.2, 0.2, left_lane );
+      colorLeft  = nvgRGBAf(1.0, 0.2, 0.2, 1.0 );
     else
       colorLeft  = nvgRGBAf(0.2, 0.2, 1.0, left_lane );    
   }
@@ -497,7 +497,7 @@ static void ui_draw_vision_lanes(UIState *s) {
   if( scene->rightBlinker )
   {
     if( scene->rightBlindspot )
-        colorRight  = nvgRGBAf(1.0, 0.2, 0.2, right_lane );
+        colorRight  = nvgRGBAf(1.0, 0.2, 0.2, 1.0 );
     else
         colorRight  = nvgRGBAf(0.2, 0.2, 1.0, right_lane ); 
   }
